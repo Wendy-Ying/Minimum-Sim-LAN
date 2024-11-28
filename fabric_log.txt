@@ -1,0 +1,1 @@
+[SWITCH->1] Packet forwarded - Interface: 1, Packet(src=00:00:00:00:00:03, dst=00:00:00:00:00:02, payload=Test selective)
