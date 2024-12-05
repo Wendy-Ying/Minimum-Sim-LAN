@@ -23,7 +23,6 @@ class Switch:
         self.num_interfaces = num_interfaces
         self.interfaces = {}
         self.mac_table = {}
-        self.mac = {}
         self.fabric = fabric
         for i in range(self.num_interfaces):
             self.interfaces[i] = None
@@ -34,16 +33,15 @@ class Switch:
         dst_mac = packet.dst
 
         # Check if the source MAC is already in the MAC table
-        if src_mac not in self.mac:
+        if src_mac not in self.mac_table:
             # Learn the source MAC address and associate it with the incoming interface
-            self.mac[src_mac] = src_mac
             self.mac_table[src_mac] = 0
             print(f"Switch learned MAC {src_mac}")
         else:
             self.mac_table[src_mac] = 1
             
         # Selective forwarding or flooding
-        if dst_mac in self.mac:
+        if dst_mac in self.mac_table:
             # Forward to the known destination interface
             dst_interface = None
             for interface, mac in self.fabric.physical_map.items():
@@ -55,7 +53,6 @@ class Switch:
             self.fabric.forward_to_interface(packet, dst_interface)
         else:
             # Update the MAC table with the new interface
-            self.mac[dst_mac] = self.fabric.interfaces
             self.mac_table[dst_mac] = 1
             # Flood to all interfaces except the incoming one
             print(f"Switch flooding packet to all interfaces")
