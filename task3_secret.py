@@ -1,5 +1,35 @@
 from ee315_24_lib import SwitchFabric, Packet
+
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.backends import default_backend
+import os
 import re
+
+# 生成AES密钥
+def generate_aes_key():
+    return os.urandom(32)  # 生成32字节的随机密钥
+
+# AES加密
+def aes_encrypt(key, message):
+    padder = padding.PKCS7(128).padder()
+    padded_message = padder.update(message.encode()) + padder.finalize()
+    iv = os.urandom(16)  # 生成16字节的随机初始化向量
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+    encryptor = cipher.encryptor()
+    encrypted_message = encryptor.update(padded_message) + encryptor.finalize()
+    return iv + encrypted_message  # 返回IV和加密消息的组合
+
+# AES解密
+def aes_decrypt(key, encrypted_message):
+    iv = encrypted_message[:16]  # 提取IV
+    encrypted_message = encrypted_message[16:]  # 提取加密消息
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+    decryptor = cipher.decryptor()
+    padded_message = decryptor.update(encrypted_message) + decryptor.finalize()
+    unpadder = padding.PKCS7(128).unpadder()
+    message = unpadder.update(padded_message) + unpadder.finalize()
+    return message.decode()
 
 class Host:
     def __init__(self, mac, interface):
@@ -8,23 +38,32 @@ class Host:
         self.mac = mac
         self.interface = interface
         self.buffer = []
+        self.aes_key = generate_aes_key()  # 使用AES密钥
 
     def send_packet(self, dst_mac, payload, switch):
-        packet = Packet(self.mac, dst_mac, payload)
+        print(f"Host {self.mac} sending payload: '{payload}'")
+        encrypted_payload = aes_encrypt(self.aes_key, payload)
+        print(f"Host {self.mac} encrypted payload: {encrypted_payload}")
+        print(f"Encrypted payload length: {len(encrypted_payload)}")
+        packet = Packet(self.mac, dst_mac, encrypted_payload)
         switch.handle_packet(packet)
-        switch.add_mac(self.mac, self.interface)
 
     def receive_packet(self, packet):
         if packet.dst == self.mac:
-            self.buffer.append(packet)
-            print(f"Host {self.mac} received packet: {packet.payload}")
+            print(f"Host {self.mac} received encrypted packet: {packet.payload}")
+            print(f"Received payload length: {len(packet.payload)}")
+            decrypted_payload = aes_decrypt(self.aes_key, packet.payload)
+            if decrypted_payload:
+                self.buffer.append(decrypted_payload)
+                print(f"Host {self.mac} decrypted payload: '{decrypted_payload}'")
+            else:
+                print("Failed to decrypt the packet.")
 
 class Switch:
     def __init__(self, fabric, num_interfaces=8):
         self.num_interfaces = num_interfaces
         self.interfaces = {}
         self.mac_table = {}
-        self.mac = {}
         self.fabric = fabric
         for i in range(self.num_interfaces):
             self.interfaces[i] = None
@@ -61,43 +100,24 @@ class Switch:
             for i, host in self.interfaces.items():
                 if host and i != src_mac:
                     self.fabric.forward_to_interface(packet, i)
-    
-    # key changes here
-    def add_mac(self, mac, interface):
-        # delete the old interface
-        old_mac = self.get_mac_for_interface(interface)
-        if old_mac!= mac and old_mac != None:
-            del self.mac[old_mac]
-            del self.mac_table[old_mac]
-            print(f"Deleted interface {interface} from mac {mac}")
-        # delete the old mac
-        if mac in self.mac:
-            del self.mac[mac]
-            del self.mac_table[mac]
-            print(f"Deleted MAC {mac} from interface {interface}")
-        self.mac[mac] = interface
-        print(f"Switch added MAC {mac} to interface {interface}")
-
-    def get_mac_for_interface(self, interface):
-        for mac, intf in self.mac.items():
-            if intf == interface:
-                return mac
-        return None
-
-    def print_mac(self):
-        print("Current MAC address to interface mapping:")
-        for mac, interface in self.mac.items():
-            print(f"MAC: {mac} -> Interface: {interface}")
 
 # 创建网络
 shared_fabric = SwitchFabric()
 switch = Switch(shared_fabric)
 
+# 共享密钥
+shared_aes_key = generate_aes_key()
+
 host1 = Host("00:00:00:00:00:01", 0)
 host2 = Host("00:00:00:00:00:02", 1)
 host3 = Host("00:00:00:00:00:03", 2)
 
-# 连接主机到交换机
+# 设置所有主机使用相同的密钥
+host1.aes_key = shared_aes_key
+host2.aes_key = shared_aes_key
+host3.aes_key = shared_aes_key
+
+# Connect hosts directly through fabric
 shared_fabric.connect_host_to_switch(host1, switch)
 shared_fabric.connect_host_to_switch(host2, switch)
 shared_fabric.connect_host_to_switch(host3, switch)
@@ -108,16 +128,3 @@ host2.send_packet("00:00:00:00:00:03", "Hello from B", switch)
 host1.send_packet("00:00:00:00:00:03", "Hello from A", switch)
 host3.send_packet("00:00:00:00:00:01", "Hello from C", switch)
 host3.send_packet("00:00:00:00:00:02", "Hello from C", switch)
-
-# 添加新的MAC地址
-host4 = Host("00:00:00:00:00:04", 1)
-shared_fabric.connect_host_to_switch(host4, switch)
-host4.send_packet("00:00:00:00:00:03", "Hello from D", switch)
-
-# 添加新的接口
-host5 = Host("00:00:00:00:00:03", 3)
-shared_fabric.connect_host_to_switch(host5, switch)
-host5.send_packet("00:00:00:00:00:01", "Hello from E", switch)
-
-# 打印当前的MAC地址到接口映射
-switch.print_mac()
