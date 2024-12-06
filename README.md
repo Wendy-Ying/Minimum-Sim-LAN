@@ -19,7 +19,7 @@ Key changes in [add_mac(self, mac, interface)](https://github.com/Wendy-Ying/Min
 
 <img src="./task3_update_change.png" width="50%">
 
-## Encrypted Packets
+### Encrypted Packets
 The packages are encrypted and decrypted.
 
 Key changes in [send_packet(self, dst_mac, payload, switch), receive_packet(self, packet), aes_encrypt(key, message), aes_decrypt(key, encrypted_message)](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_secret.py).
