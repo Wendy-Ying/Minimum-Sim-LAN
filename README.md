@@ -22,6 +22,13 @@ Key changes in [add_mac(self, mac, interface)](https://github.com/Wendy-Ying/Min
 ### Encrypted Packets
 The packages are encrypted and decrypted.
 
-Key changes in [send_packet(self, dst_mac, payload, switch), receive_packet(self, packet), aes_encrypt(key, message), aes_decrypt(key, encrypted_message)](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_secret.py).
+Key changes in [send_packet(self, dst_mac, payload, switch), receive_packet(self, packet)](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_secret.py).
 
-<img src="./task3_secret.png" width="50%">
+<img src="./task3_secret.png" width="80%">
+
+### Firewall
+Firewall is very important for the true network. The program allows adding firewall rule and block them.
+
+Key changes in [check_firewall(self, packet)](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_firewall.py#L72)
+
+<img src="./task3_firewall.png" width="50%">
