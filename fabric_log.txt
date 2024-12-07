@@ -1,1 +1,10 @@
-[SWITCH->1] Packet forwarded - Interface: 1, Packet(src=00:00:00:00:00:03, dst=00:00:00:00:00:02, payload=Test selective)
+Switch Fabric Log Started
+[INFO] Switch Fabric initialized
+[SWITCH->0] Packet forwarded - Interface: 0, Packet(src=00:00:00:00:00:01, dst=00:00:00:00:00:02, payload=Hello from A)
+[SWITCH->1] Packet forwarded - Interface: 1, Packet(src=00:00:00:00:00:01, dst=00:00:00:00:00:02, payload=Hello from A)
+[SWITCH->2] Packet forwarded - Interface: 2, Packet(src=00:00:00:00:00:01, dst=00:00:00:00:00:02, payload=Hello from A)
+[SWITCH->0] Packet forwarded - Interface: 0, Packet(src=00:00:00:00:00:02, dst=00:00:00:00:00:03, payload=Hello from B)
+[SWITCH->1] Packet forwarded - Interface: 1, Packet(src=00:00:00:00:00:02, dst=00:00:00:00:00:03, payload=Hello from B)
+[SWITCH->2] Packet forwarded - Interface: 2, Packet(src=00:00:00:00:00:02, dst=00:00:00:00:00:03, payload=Hello from B)
+[SWITCH->0] Packet forwarded - Interface: 0, Packet(src=00:00:00:00:00:03, dst=00:00:00:00:00:01, payload=Hello from C)
+[SWITCH->1] Packet forwarded - Interface: 1, Packet(src=00:00:00:00:00:03, dst=00:00:00:00:00:02, payload=Hello from C)

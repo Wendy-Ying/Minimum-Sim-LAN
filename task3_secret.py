@@ -117,7 +117,7 @@ host1.aes_key = shared_aes_key
 host2.aes_key = shared_aes_key
 host3.aes_key = shared_aes_key
 
-# Connect hosts directly through fabric
+# 连接主机到交换机
 shared_fabric.connect_host_to_switch(host1, switch)
 shared_fabric.connect_host_to_switch(host2, switch)
 shared_fabric.connect_host_to_switch(host3, switch)
