@@ -26,6 +26,13 @@ Key changes in [send_packet(self, dst_mac, payload, switch), receive_packet(self
 
 <img src="./task3_secret.png" width="80%">
 
+### Modulation
+Using python to do modulation, we can transfer the string to digits and transmitt them. Write modulation module and demoulation module.
+
+Key changes in [string2digital(message), digital2string(message)](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_modulation.py#L4)
+
+<img src="./task3_modulation.png" width="70%">
+
 ### Firewall
 Firewall is very important for the true network. The program allows adding firewall rule and block them.
 
