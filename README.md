@@ -35,15 +35,15 @@ Key changes in [string2digital(message), digital2string(message)](https://github
 
 <img src="./task3_modulation.png" width="70%">
 
-## Final Result
-All works are integrated into [here](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_final.py).
-
-<img src="./task3_final.png" width="100%">
-
-
 ### Firewall
 Firewall is very important for the true network. The program allows adding firewall rule and block them.
 
 Key changes in [check_firewall(self, packet)](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_firewall.py#L72)
 
 <img src="./task3_firewall.png" width="50%">
+
+
+## Final Result
+All works are integrated into [here](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/task3_final.py).
+
+<img src="./task3_final.png" width="100%">
