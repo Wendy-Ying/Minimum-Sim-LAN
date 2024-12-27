@@ -1,5 +1,5 @@
 # Minimum Sim LAN
-This project simulates a simple local area network communication using Python. The project introduction is [here](https://github.com/ensomnia16/EE315-24-Proj).
+This project simulates a simple local area network communication using Python. The project introduction is [here](https://github.com/ensomnia16/EE315-24-Proj). The report is [here](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/report.pdf).
 
 ![](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/output.gif)
 
