@@ -3,6 +3,10 @@ This project simulates a simple local area network communication using Python. T
 
 ![](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/output.gif)
 
+## cool!
+![image](https://github.com/user-attachments/assets/94ef7b9f-cb70-423e-8aa8-75a21fb1840a)
+
+
 ## task1: bus implementation
 implemention [here](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/skeleton_bus.py), test [here](https://github.com/Wendy-Ying/Minimum-Sim-LAN/blob/main/test_bus.py)
 
